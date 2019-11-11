@@ -1,0 +1,27 @@
+﻿  二叉树.cpp
+  哈希桶.cpp
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(41): error C2100: 非法的间接寻址
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xutility(3815): note: 参见对正在编译的函数 模板 实例化“void std::iter_swap<_BidIt,_BidIt>(_FwdIt1,_FwdIt2)”的引用
+          with
+          [
+              _BidIt=char,
+              _FwdIt1=char,
+              _FwdIt2=char
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xutility(3860): note: 参见对正在编译的函数 模板 实例化“void std::_Reverse_unchecked1<_BidIt>(_BidIt,_BidIt,std::integral_constant<size_t,0>)”的引用
+          with
+          [
+              _BidIt=char
+          ]
+  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\xutility(3867): note: 参见对正在编译的函数 模板 实例化“void std::_Reverse_unchecked<_Iter>(const _BidIt,const _BidIt)”的引用
+          with
+          [
+              _Iter=char,
+              _BidIt=char
+          ]
+  c:\users\administrator\documents\cpp\比特上课代码\博客\博客\哈希桶.cpp(161): note: 参见对正在编译的函数 模板 实例化“void std::reverse<char>(const _BidIt,const _BidIt)”的引用
+          with
+          [
+              _BidIt=char
+          ]
+  正在生成代码...
