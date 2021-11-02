@@ -300,3 +300,112 @@ using namespace std;
 //	url.erase(0, pos + 3);
 //	cout << url << endl;
 //}
+
+
+//
+//-**reverse逆转 * *
+//
+//int main()
+//{
+//    string s("anmo");
+//    cout << s << endl;//anmo
+//    reverse(s.begin(), s.end());
+//    cout << s << endl;//omna
+//
+//    system("pause");
+//    return 0;
+//}
+//
+//- **append添加 * *
+//
+//int main()
+//{
+//    string s("I");
+//    string s2(" anmo ");
+//    s += " love ";
+//    cout << s << endl;//I love
+//    s += " you ";
+//    cout << s << endl;//I love you
+//    s.append(s2);
+//    cout << s << endl;//I love you anmo
+//    s.append("!!!");
+//    cout << s << endl;//I love you anmo!!!
+//
+//
+//    system("pause");
+//    return 0;
+//}
+//
+//- **insert插入 * *
+//
+//int main()
+//{
+//    string s("IYOU");
+//    s.insert(1, " LOVE ");
+//    cout << s << endl;//I LOVE YOU
+//
+//    system("pause");
+//    return 0;
+//}
+//
+//- **erase清除 find查找 * *
+//
+//int main()
+//{
+//    string s("hello anmo");
+//    cout << s << endl;//hello anmo
+//    s.erase(s.begin() + s.find(" "), s.end());
+//    cout << s << endl;//hello
+//
+//    //  获取file的后缀
+//    string s1("hauhduadh.txt");
+//    cout << s1 << endl;//hauhduadh.txt
+//    s1.erase(s1.begin() + s1.find("."), s1.end());
+//    cout << s1 << endl;//hauhduadh
+//
+//    system("pause");
+//    return 0;
+//}
+//
+//- **substr截取 rfind反向查找 * *
+//
+//int main()
+//{
+//    string s("anmo.txt");
+//    cout << s << endl;//anmo.txt
+//    cout << s.substr(s.rfind(".") + 1) << endl;//txt
+//
+//    string s1("https://www.duba.com/?f=qlswdhq&tjiedb=1&ft=gjlock&--type=0");
+//    int ret = s1.find(" : ") + 3;
+//    cout << s1.substr(ret, s1.find("/", ret) - ret) << endl;//www.duba.com
+//
+//    system("pause");
+//    return 0;
+//}
+//
+//- push_back、append
+//
+//int main()
+//{
+//    string s;
+//    s.push_back('I');//在s后插入I
+//    cout << s << endl;//I
+//    s.append(" Love ");//在s后追加一个字符串"Love"
+//    cout << s << endl;//I Love
+//    s += " you "; // 在s后追加一个字符串'you'
+//    cout << s << endl;//I Love  you
+//    s += " anmo ";// 在s后追加一个字符串"anmo" 
+//    cout << s << endl;//I Love  you  anmo
+//    s += '!';//在s后追加一个字符'!'
+//    cout << s << endl;//I Love  you  anmo !
+//
+//
+//    //获取file后缀
+//    string file("anmo.txt");
+//    size_t pos = file.rfind('.');
+//    cout << file.substr(pos + 1, file.size() - pos) << endl;//txt
+//
+//
+//    system("pause");
+//    return 0;
+//}
