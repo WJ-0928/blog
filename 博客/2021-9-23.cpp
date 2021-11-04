@@ -501,182 +501,298 @@ using namespace std;
 //	char* _str;
 //};
 
-namespace bit
+//namespace bit
+//{
+//	class string
+//	{
+//	public:
+//		typedef char* iterator;
+//	public:
+//		string(const char* str = "")
+//		{
+//			_size = strlen(str);
+//			_capacity = _size;
+//			_str = new char[_capacity + 1];
+//			strcpy(_str, str);
+//		}
+//		string(const string& s)
+//			: _str(nullptr)
+//			, _size(0)
+//			, _capacity(0)
+//		{
+//			string tmp(s);
+//			this->Swap(tmp);
+//		}
+//		string& operator=(string s)
+//		{
+//			this->Swap(s);
+//			return *this;
+//		}
+//		~string()
+//		{
+//			if (_str)
+//			{
+//				delete[] _str;
+//				_str = nullptr;
+//			}
+//		}
+//		/////////////////////////////////////////////////////////////////
+//		// iterator
+//		iterator begin() { return _str; }
+//		iterator end() { return _str + _size; }
+//		/////////////////////////////////////////////////////////////////
+//		// modify
+//		void push_back(char c)
+//		{
+//			if (_size == _capacity)
+//				Reserve(_capacity * 2);
+//
+//			_str[_size++] = c;
+//			_str[_size] = '\0';
+//		}
+//		string& operator+=(char c)
+//		{
+//			PushBack(c);
+//			return *this;
+//		}
+//
+//		// 作业实现
+//		void append(const char* str);
+//		string& operator+=(const char* str);
+//		void clear()
+//		{
+//			_size = 0;
+//			_str[_size] = '\0';
+//		}
+//		void swap(string& s)
+//		{
+//			swap(_str, s._str);
+//			swap(_size, s._size);
+//			swap(_capacity, s._capacity);
+//		}
+//		const char* c_str()const
+//		{
+//			return _str;
+//		}
+//		/////////////////////////////////////////////////////////////////
+//		// capacity
+//		size_t size()const
+//			size_t capacity()const
+//			bool empty()const
+//
+//			void resize(size_t newSize, char c = '\0')
+//		{
+//			if (newSize > _size)
+//			{
+//				// 如果newSize大于底层空间大小，则需要重新开辟空间
+//				if (newSize > _capacity)
+//				{
+//					Reserve(newSize);
+//				}
+//				memset(_str + _size, c, newSize - _size);
+//			}
+//			_size = newSize;
+//			_str[newSize] = '\0';
+//		}
+//		void reserve(size_t newCapacity)
+//		{
+//			// 如果新容量大于旧容量，则开辟空间
+//			if (newCapacity > _capacity)
+//			{
+//				char* str = new char[newCapacity + 1];
+//				strcpy(str, _str);
+//				// 释放原来旧空间,然后使用新空间
+//				delete[] _str;
+//				_str = str;
+//				_capacity = newCapacity;
+//			}
+//		}
+//		////////////////////////////////////////////////////////////////////
+//		// access
+//		char& operator[](size_t index)
+//		{
+//			assert(index < _size);
+//			return _str[index];
+//		}
+//		const char& operator[](size_t index)const
+//		{
+//			assert(index < _size);
+//			return _str[index];
+//		}
+//		////////////////////////////////////////////////////////////////////
+//		// 作业
+//		bool operator<(const string& s);
+//		bool operator<=(const string& s);
+//		bool operator>(const string& s);
+//		bool operator>=(const string& s);
+//		bool operator==(const string& s);
+//		bool operator!=(const string& s);
+//		// 返回c在string中第一次出现的位置
+//		size_t find(char c, size_t pos = 0) const;
+//		// 返回子串s在string中第一次出现的位置
+//		size_t find(const char* s, size_t pos = 0) const;
+//
+//		// 在pos位置上插入字符c/字符串str，并返回该字符的位置
+//		string& insert(size_t pos, char c);
+//		string& insert(size_t pos, const char* str);
+//		// 删除pos位置上的元素，并返回该元素的下一个位置
+//		string& erase(size_t pos, size_t len);
+// private:
+//	 friend ostream& operator<<(ostream& _cout, const bit::string& s);
+//	 friend istream& operator>>(istream& _cin, bit::string& s);
+// private:
+//	 char* _str;
+//	 size_t _capacity;
+//	 size_t _size;
+// };
+//}
+//ostream& bit::operator<<(ostream& _cout, const bit::string& s) {
+//	// 不能使用这个
+//	//cout << s._str;
+//	for (size_t i = 0; i < s.size(); ++i)
+//	{
+//		_cout << s[i];
+//	}
+//	return _cout;
+//}
+/////////对自定义的string类进行测试
+//void TestBitstring()
+//{
+//	bit::string s1("hello");
+//	s1.push_back(' ');
+//	s1.push_back('b');
+//	s1.append(1, 'i');
+//	s1 += 't';
+//	cout << s1 << endl;
+//	cout << s1.size() << endl;
+//	cout << s1.capacity() << endl;
+//	// 利用迭代器打印string中的元素
+//	string::iterator it = s1.begin();
+//	while (it != s1.end())
+//	{
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//
+//	// 这里可以看到一个类只要支持的基本的iterator，就支持范围for
+//	for (auto ch : s1)
+//		cout << ch << " ";
+//	cout << endl;
+//}
+
+// constructing vectors
+//#include <iostream>
+//#include <vector>
+//int main()
+//{
+//	// constructors used in the same order as described above:
+//	std::vector<int> first; // empty vector of ints
+//	std::vector<int> second(4, 100); // four ints with value 100
+//	std::vector<int> third(second.begin(), second.end()); // iterating through second
+//	std::vector<int> fourth(third); // a copy of third
+//	// 下面涉及迭代器初始化的部分，我们学习完迭代器再来看这部分
+//	// the iterator constructor can also be used to construct from arrays:
+//	int myints[] = { 16,2,77,29 };
+//	std::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
+//	std::cout << "The contents of fifth are:";
+//	for (std::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+//		std::cout << ' ' << *it;
+//	std::cout << '\n';
+//	return 0;
+//}
+
+//#include <iostream>
+//#include <vector>
+//using namespace std;
+//void PrintVector(const vector<int>& v) {
+//	// const对象使用const迭代器进行遍历打印
+//	vector<int>::const_iterator it = v.begin();
+//	while (it != v.end())
+//	{
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//}
+//int main()
+//{
+//	// 使用push_back插入4个数据
+//	vector<int> v;
+//	v.push_back(1);
+//	v.push_back(2);
+//	v.push_back(3);
+//	v.push_back(4);
+//	// 使用迭代器进行遍历打印
+//	vector<int>::iterator it = v.begin();
+//	while (it != v.end())
+//	{
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//	// 使用迭代器进行修改
+//	it = v.begin();
+//	while (it != v.end())
+//	{
+//		*it *= 2;
+//		++it;
+//	}
+//	// 使用反向迭代器进行遍历再打印
+//	vector<int>::reverse_iterator rit = v.rbegin();
+//	while (rit != v.rend())
+//	{
+//		cout << *rit << " ";
+//		++rit;
+//	}
+//	cout << endl;
+//	PrintVector(v);
+//	return 0;
+//}
+
+// push_back/pop_back
+#include <iostream>
+#include <vector>
+using namespace std;
+int main()
 {
-	class string
-	{
-	public:
-		typedef char* iterator;
-	public:
-		string(const char* str = "")
-		{
-			_size = strlen(str);
-			_capacity = _size;
-			_str = new char[_capacity + 1];
-			strcpy(_str, str);
-		}
-		string(const string& s)
-			: _str(nullptr)
-			, _size(0)
-			, _capacity(0)
-		{
-			string tmp(s);
-			this->Swap(tmp);
-		}
-		string& operator=(string s)
-		{
-			this->Swap(s);
-			return *this;
-		}
-		~string()
-		{
-			if (_str)
-			{
-				delete[] _str;
-				_str = nullptr;
-			}
-		}
-		/////////////////////////////////////////////////////////////////
-		// iterator
-		iterator begin() { return _str; }
-		iterator end() { return _str + _size; }
-		/////////////////////////////////////////////////////////////////
-		// modify
-		void push_back(char c)
-		{
-			if (_size == _capacity)
-				Reserve(_capacity * 2);
-
-			_str[_size++] = c;
-			_str[_size] = '\0';
-		}
-		string& operator+=(char c)
-		{
-			PushBack(c);
-			return *this;
-		}
-
-		// 作业实现
-		void append(const char* str);
-		string& operator+=(const char* str);
-		void clear()
-		{
-			_size = 0;
-			_str[_size] = '\0';
-		}
-		void swap(string& s)
-		{
-			swap(_str, s._str);
-			swap(_size, s._size);
-			swap(_capacity, s._capacity);
-		}
-		const char* c_str()const
-		{
-			return _str;
-		}
-		/////////////////////////////////////////////////////////////////
-		// capacity
-		size_t size()const
-			size_t capacity()const
-			bool empty()const
-
-			void resize(size_t newSize, char c = '\0')
-		{
-			if (newSize > _size)
-			{
-				// 如果newSize大于底层空间大小，则需要重新开辟空间
-				if (newSize > _capacity)
-				{
-					Reserve(newSize);
-				}
-				memset(_str + _size, c, newSize - _size);
-			}
-			_size = newSize;
-			_str[newSize] = '\0';
-		}
-		void reserve(size_t newCapacity)
-		{
-			// 如果新容量大于旧容量，则开辟空间
-			if (newCapacity > _capacity)
-			{
-				char* str = new char[newCapacity + 1];
-				strcpy(str, _str);
-				// 释放原来旧空间,然后使用新空间
-				delete[] _str;
-				_str = str;
-				_capacity = newCapacity;
-			}
-		}
-		////////////////////////////////////////////////////////////////////
-		// access
-		char& operator[](size_t index)
-		{
-			assert(index < _size);
-			return _str[index];
-		}
-		const char& operator[](size_t index)const
-		{
-			assert(index < _size);
-			return _str[index];
-		}
-		////////////////////////////////////////////////////////////////////
-		// 作业
-		bool operator<(const string& s);
-		bool operator<=(const string& s);
-		bool operator>(const string& s);
-		bool operator>=(const string& s);
-		bool operator==(const string& s);
-		bool operator!=(const string& s);
-		// 返回c在string中第一次出现的位置
-		size_t find(char c, size_t pos = 0) const;
-		// 返回子串s在string中第一次出现的位置
-		size_t find(const char* s, size_t pos = 0) const;
-
-		// 在pos位置上插入字符c/字符串str，并返回该字符的位置
-		string& insert(size_t pos, char c);
-		string& insert(size_t pos, const char* str);
-		// 删除pos位置上的元素，并返回该元素的下一个位置
-		string& erase(size_t pos, size_t len);
- private:
-	 friend ostream& operator<<(ostream& _cout, const bit::string& s);
-	 friend istream& operator>>(istream& _cin, bit::string& s);
- private:
-	 char* _str;
-	 size_t _capacity;
-	 size_t _size;
- };
-}
-ostream& bit::operator<<(ostream& _cout, const bit::string& s) {
-	// 不能使用这个
-	//cout << s._str;
-	for (size_t i = 0; i < s.size(); ++i)
-	{
-		_cout << s[i];
+	int a[] = { 1, 2, 3, 4 };
+	vector<int> v(a, a + sizeof(a) / sizeof(int));
+	vector<int>::iterator it = v.begin();
+	while (it != v.end()) {
+		cout << *it << " ";
+		++it;
 	}
-	return _cout;
-}
-///////对自定义的string类进行测试
-void TestBitstring()
-{
-	bit::string s1("hello");
-	s1.push_back(' ');
-	s1.push_back('b');
-	s1.append(1, 'i');
-	s1 += 't';
-	cout << s1 << endl;
-	cout << s1.size() << endl;
-	cout << s1.capacity() << endl;
-	// 利用迭代器打印string中的元素
-	string::iterator it = s1.begin();
-	while (it != s1.end())
-	{
+	cout << endl;
+	v.pop_back();
+	v.pop_back();
+	it = v.begin();
+	while (it != v.end()) {
 		cout << *it << " ";
 		++it;
 	}
 	cout << endl;
 
-	// 这里可以看到一个类只要支持的基本的iterator，就支持范围for
-	for (auto ch : s1)
-		cout << ch << " ";
+	// 使用find查找3所在位置的iterator
+	vector<int>::iterator pos = find(v.begin(), v.end(), 3);
+	// 在pos位置之前插入30
+	v.insert(pos, 30);
+	vector<int>::iterator it = v.begin();
+	while (it != v.end()) {
+		cout << *it << " ";
+		++it;
+	}
 	cout << endl;
+
+	pos = find(v.begin(), v.end(), 3);
+	// 删除pos位置的数据
+	v.erase(pos);
+	it = v.begin();
+	while (it != v.end()) {
+		cout << *it << " ";
+		++it;
+	}
+	cout << endl;
+
+	return 0;
 }
