@@ -751,48 +751,263 @@ using namespace std;
 //}
 
 // push_back/pop_back
+//#include <iostream>
+//#include <vector>
+//using namespace std;
+//int main()
+//{
+//	int a[] = { 1, 2, 3, 4 };
+//	vector<int> v(a, a + sizeof(a) / sizeof(int));
+//	vector<int>::iterator it = v.begin();
+//	while (it != v.end()) {
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//	v.pop_back();
+//	v.pop_back();
+//	it = v.begin();
+//	while (it != v.end()) {
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//
+//	// 使用find查找3所在位置的iterator
+//	vector<int>::iterator pos = find(v.begin(), v.end(), 3);
+//	// 在pos位置之前插入30
+//	v.insert(pos, 30);
+//	vector<int>::iterator it = v.begin();
+//	while (it != v.end()) {
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//
+//	pos = find(v.begin(), v.end(), 3);
+//	// 删除pos位置的数据
+//	v.erase(pos);
+//	it = v.begin();
+//	while (it != v.end()) {
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//
+//	return 0;
+//}
+//#include <iostream>
+//using namespace std;
+//#include <vector>
+//int main()
+//{
+//	vector<int> v{ 1,2,3,4,5,6 };
+//
+//	auto it = v.begin();
+//
+//	// 将有效元素个数增加到100个，多出的位置使用8填充，操作期间底层会扩容
+//	// v.resize(100, 8);
+//
+//	// reserve的作用就是改变扩容大小但不改变有效元素个数，操作期间可能会引起底层容量改变
+//	// v.reserve(100);
+//
+//	// 插入元素期间，可能会引起扩容，而导致原空间被释放
+//	// v.insert(v.begin(), 0);
+//	// v.push_back(8);
+//
+// // 给vector重新赋值，可能会引起底层容量改变
+//	v.assign(100, 8);
+//
+//	/*
+//	出错原因：以上操作，都有可能会导致vector扩容，也就是说vector底层原理旧空间被释放掉，
+//   而在打印时，it还使用的是释放之间的旧空间，在对it迭代器操作时，实际操作的是一块已经被释放的
+//   空间，而引起代码运行时崩溃。
+//	解决方式：在以上操作完成之后，如果想要继续通过迭代器操作vector中的元素，只需给it重新
+//   赋值即可。
+//	*/
+//	while (it != v.end())
+//	{
+//		cout << *it << " ";
+//		++it;
+//	}
+//	cout << endl;
+//	return 0;
+//}
+//
+//#include <iostream>
+//using namespace std;
+//#include <vector>
+//int main()
+//{
+//	int a[] = { 1, 2, 3, 4 };
+//	vector<int> v(a, a + sizeof(a) / sizeof(int));
+//	// 使用find查找3所在位置的iterator
+//	vector<int>::iterator pos = find(v.begin(), v.end(), 3);
+//	// 删除pos位置的数据，导致pos迭代器失效。
+//	v.erase(pos);
+//	cout << *pos << endl; // 此处会导致非法访问
+//	return 0;
+//}
+
 #include <iostream>
-#include <vector>
 using namespace std;
-int main()
+#include <assert.h>
+// 注意这里namespace大家下去就不要取名为bit了，否则出去容易翻车。^^
+namespace bit
 {
-	int a[] = { 1, 2, 3, 4 };
-	vector<int> v(a, a + sizeof(a) / sizeof(int));
-	vector<int>::iterator it = v.begin();
-	while (it != v.end()) {
-		cout << *it << " ";
-		++it;
-	}
-	cout << endl;
-	v.pop_back();
-	v.pop_back();
-	it = v.begin();
-	while (it != v.end()) {
-		cout << *it << " ";
-		++it;
-	}
-	cout << endl;
+	template<class T>
+	class vector
+	{
+	public:
+		// Vector的迭代器是一个原生指针
+		typedef T* iterator;
+		typedef const T* const_iterator;
+		iterator begin() { return _start; }
+		iterator end() { return _finish; }
+		const_iterator cbegin() const { return _start; }
+		const_iterator cend() const { return _finish; }
+		// construct and destroy
+		vector()
+			: _start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr)
+		{}
+		vector(int n, const T& value = T())
+			: _start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr) {
+			reserve(n);
+			while (n--)
+			{
+				push_back(value);
+			}
+		}
+		// 如果使用iterator做迭代器，会导致初始化的迭代器区间[first,last)只能是vector的迭代器
+		// 重新声明迭代器，迭代器区间[first,last]可以是任意容器的迭代器
+		template<class InputIterator>
+		vector(InputIterator first, InputIterator last) {
+			reserve(last - first);
+			while (first != last)
+			{
+				push_back(*first);
+				++first;
+			}
+		}
+		vector(const vector<T>& v)
+			: _start(nullptr)
+			, _finish(nullptr)
+			, _endOfStorage(nullptr) {
+			reserve(v.capacity());
+			iterator it = begin();
+			const_iterator vit = v.cbegin();
+			while (vit != v.cend())
+			{
+				*it++ = *vit++;
+			}
+		}
+		vector<T>& operator=(vector<T> v) {
+			swap(v);
+			return *this;
+		}
+		~vector()
+		{
+			delete[] _start;
+			_start = _finish = _endOfStorage = nullptr;
+		}
 
-	// 使用find查找3所在位置的iterator
-	vector<int>::iterator pos = find(v.begin(), v.end(), 3);
-	// 在pos位置之前插入30
-	v.insert(pos, 30);
-	vector<int>::iterator it = v.begin();
-	while (it != v.end()) {
-		cout << *it << " ";
-		++it;
-	}
-	cout << endl;
+		// capacity
+		size_t size() const { return _finish - _start; }
+		size_t capacity() const { return _endOfStorage - _start; }
+		bool empty() const { return _first == _finish; }
+		void reserve(size_t n) {
+			if (n > capacity())
+			{
+				size_t oldSize = size();
+				T* tmp = new T[n];
+				// 这里直接使用memcpy?
+				//if (_start)
+				// memcpy(tmp, _start, sizeof(T)*size);
 
-	pos = find(v.begin(), v.end(), 3);
-	// 删除pos位置的数据
-	v.erase(pos);
-	it = v.begin();
-	while (it != v.end()) {
-		cout << *it << " ";
-		++it;
-	}
-	cout << endl;
+				if (_start)
+				{
+					for (size_t i = 0; i < oldSize; ++i)
+						tmp[i] = _start[i];
+				}
+				_start = tmp;
+				_finish = _start + size;
+				_endOfStorage = _start + n;
+			}
+		}
+		void resize(size_t n, const T& value = T())
+		{
+			// 1.如果n小于当前的size，则数据个数缩小到n
+			if (n <= size())
+			{
+				_finish = _start + n;
+				return;
+			}
+			// 2.空间不够则增容
+			if (n > capacity())
+				reserve(n);
+			// 3.将size扩大到n
+			iterator it = _finish;
+			iterator _finish = _start + n;
+			while (it != _finish)
+			{
+				*it = value;
+				++it;
+			}
+		}
+		///////////////access///////////////////////////////
+		T& operator[](size_t pos) { return _start[pos]; }
+		const T& operator[](size_t pos)const { return _start[pos]; }
 
-	return 0;
+		///////////////modify/////////////////////////////
+		void push_back(const T& x) { insert(end(), x); }
+		void pop_back() { erase(--end()); }
+
+		void swap(vector<T>& v) {
+			swap(_start, v._start);
+			swap(_finish, v._finish);
+			swap(_endOfStorage, v._endOfStorage);
+		}
+
+		iterator insert(iterator pos, const T& x) {
+			assert(pos <= _finish);
+			// 空间不够先进行增容
+			if (_finish == _endOfStorage)
+			{
+				size_t size = size();
+				size_t newCapacity = (0 == capacity()) ? 1 : capacity() * 2;
+				reserve(newCapacity);
+				// 如果发生了增容，需要重置pos
+				pos = _start + size;
+			}
+			iterator end = _finish - 1;
+			while (end >= pos)
+			{
+				*(end + 1) = *end;
+				--end;
+			}
+			*pos = x;
+			++_finish;
+			return pos;
+		}
+		// 返回删除数据的下一个数据
+		// 方便解决:一边遍历一边删除的迭代器失效问题
+		iterator erase(Iterator pos) {
+			// 挪动数据进行删除
+			iterator begin = pos + 1;
+			while (begin != _finish) {
+				*(begin - 1) = *begin;
+				++begin;
+			}
+			--_finish;
+			return pos;
+		}
+private:
+	iterator _start; // 指向数据块的开始
+	iterator _finish; // 指向有效数据的尾
+	iterator _endOfStorage; // 指向存储容量的尾
+};
 }
